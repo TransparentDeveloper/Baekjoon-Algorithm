@@ -2,34 +2,30 @@ import java.io.IOException;
  
 public class Main {
  
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException{
  
+		int c = 0;
 		int count = 0;
-		int pre_str = 32;	// 공백을 의미한다.
-		int str ;
-		
+		int pre_c = 32;
 		
 		while(true) {
-			str = System.in.read();
-            
-			// 입력받은 문자가 공백일 때,
-			if(str == 32) {
-				// 이전의 문자가 공백이 아니면
-				if(pre_str != 32) count++;
+			c = System.in.read();
+			
+			if(c == 32) {
+				if(pre_c != 32)
+					count ++;
 			}
- 
-			// 입력받은 문자가 개행일때 ('\n')
-			else if(str == 10) {
-				// 이전의 문자가 공백이 아니면
-				if(pre_str != 32) count++;
+			
+			else if(c == 10) {
+				if(pre_c != 32)
+					count ++;
 				break;
 			}
 			
-			pre_str = str;
-			
+			pre_c = c;
 		}
 		
 		System.out.println(count);
 	}
- 
+	
 }
