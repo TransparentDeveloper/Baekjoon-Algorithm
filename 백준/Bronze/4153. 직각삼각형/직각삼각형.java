@@ -16,7 +16,7 @@ public class Main {
 			edge[1] = Integer.parseInt(st.nextToken());
 			edge[2] = Integer.parseInt(st.nextToken());
 			
-			if(edge[0]==0) {
+			if(edge[0]==0 || edge[1]==0 || edge[2]==0) {
 				if(edge[1]==0 && edge[2]==0) {
 					break;
 				}
