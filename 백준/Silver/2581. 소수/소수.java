@@ -4,14 +4,14 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-	static boolean[] not_prime = new boolean[10001];
-	
+	static boolean[] not_prime;
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int M = Integer.parseInt(br.readLine());
 		int N = Integer.parseInt(br.readLine());
-		
-		make_prime();
+		not_prime = new boolean[N+1];
+		get_prime();
 		int sum = 0, min = N; 
 		for(int i=M; i<=N; i++) 
 			if(not_prime[i] == false) {
@@ -23,16 +23,19 @@ public class Main {
 			return;
 		}
 		System.out.println(sum +"\n"+min);
+		
 	}
-	static void make_prime() {
+	
+	static void get_prime() {
+		
 		not_prime[0] = true;
 		not_prime[1] = true;
-		for(int i=2; i<not_prime.length;i++) {
+		for(int i=2; i<Math.sqrt(not_prime.length);i++) {
 			if(not_prime[i] == true)
 				continue;
-			for(int j=i*2 ; j<not_prime.length; j+=i) 
+			
+			for(int j=i * i ; j<not_prime.length; j+=i) 
 				not_prime[j] = true;
 		}
-		not_prime[2] = false;
 	}
 }
