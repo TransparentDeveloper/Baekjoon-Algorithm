@@ -1,0 +1,16 @@
+def solution(participant, completion):
+    list = {}
+    for i in participant:
+        list[i] = 0
+    
+    for i in completion:
+        list[i] += 1
+        
+    for i in participant:
+        list[i] -= 1
+    
+    for key, values in list.items():
+        if(values != 0):
+            answer = key
+    
+    return answer
