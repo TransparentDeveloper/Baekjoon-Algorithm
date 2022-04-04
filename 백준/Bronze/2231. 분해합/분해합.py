@@ -1,18 +1,11 @@
-number = int(input())
+n = int(input())
 
-check = False
-res = 0
-for i in range(number-1,1,-1):
-    num = i
-    sum = 0
-    while(num != 0):
-        sum+=int(num%10)
-        num=int(num/10)
-    if(sum+i==number):
-        res = i
-        check = True
+for i in range(1,n+1):
+    num = sum(map(int,str(i)))
+    num_sum = num + i
     
-if(check):
-    print(res)
-else:
-    print(0)
+    if num_sum == n:
+        print(i)
+        break
+    if i == n:
+        print(0)
