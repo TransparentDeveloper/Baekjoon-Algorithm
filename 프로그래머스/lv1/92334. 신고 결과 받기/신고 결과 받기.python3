@@ -1,0 +1,24 @@
+def solution(id_list, report, k):
+    
+    # 신고당한 횟수를 저장할 dictionary 
+    num_reports = {name:0 for name in id_list}
+    # 신고한 ID들을 저장할 dictionary
+    id_reported = {name:[] for name in id_list} 
+    
+    for sentence in report:
+        reporter = sentence.split()[0]
+        suspect = sentence.split()[1]
+        if(reporter not in id_reported[suspect]):
+            num_reports[suspect] += 1
+            id_reported[suspect].append(reporter)
+    
+    id = {name:0 for name in id_list}
+    
+    for i, name in zip(num_reports.values(), num_reports.keys()):
+        if i >= k:
+            for na in id_reported[name]:
+                id[na] += 1
+                
+    answer = [i for i in id.values()]
+
+    return answer
