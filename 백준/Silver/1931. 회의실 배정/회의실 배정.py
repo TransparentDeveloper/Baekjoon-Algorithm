@@ -1,16 +1,18 @@
 n = int(input())
-meetings = list()
+room = []
+
 for i in range(n):
-    meetings.append(tuple(map(int, input().split())))
+    a, b = map(int, input().split())
+    room.append([a, b])
 
-meetings.sort(key = lambda x: x[0])
-meetings.sort(key = lambda x: x[1])
-result = 1
-last_element = 0
+room.sort(key = lambda x: x[0])
+room.sort(key = lambda x: x[1])
 
-for i in range(1,n):
-    if(meetings[last_element][1] <= meetings[i][0]):
-        result += 1
-        last_element = i
-        
-print(result)
+cnt = 1
+end = room[0][1]
+for i in range(1, n):
+    if room[i][0] >= end:
+        cnt += 1
+        end = room[i][1]
+
+print(cnt)
