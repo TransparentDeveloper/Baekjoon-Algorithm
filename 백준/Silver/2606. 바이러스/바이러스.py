@@ -14,14 +14,15 @@ for _ in range(m):
 
 def bfs(start):
 	global count
-	q = deque(graph[start])
+	q = deque([start])
+	visited[start] = True
 	while q:
 		nxt = q.popleft()
-		if not visited[nxt]:
-			visited[nxt] = True
-			bfs(nxt)
-			count += 1
+		for i in graph[nxt]:
+			if not visited[i]:
+				q.append(i)
+				visited[i] = True
+				count += 1
 
-visited[1] =True
 bfs(1)
 print(count)
