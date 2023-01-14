@@ -35,6 +35,7 @@ public class Main {
         }
         System.out.println(sb);
     }
+
     public static int dfs(int node){
         check[node] = true;
         if(!check[elem[node]]){
@@ -42,4 +43,6 @@ public class Main {
         }
         return 1;
     }
+
+
 }
