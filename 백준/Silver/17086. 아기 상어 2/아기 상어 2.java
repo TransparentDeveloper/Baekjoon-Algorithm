@@ -48,14 +48,14 @@ public class Main {
 
     public static int bfs(int y, int x){
         visited = new boolean[N+1][M+1];
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{y,x,0});
+        Queue<Custom> q = new LinkedList<>();
+        q.add(new Custom(y,x,0));
 
         while(!q.isEmpty()){
-            int[] poll = q.poll();
-            int ny = poll[0];
-            int nx = poll[1];
-            int nCount = poll[2];
+            Custom custom = q.poll();
+            int ny = custom.y;
+            int nx = custom.x;
+            int nCount = custom.count;
 
             for(int i=0; i<8; i++){
                 //1.영역을 벗어날 경우
@@ -70,11 +70,19 @@ public class Main {
                     return nCount + 1;
                     //4. 위의 경우가 모두 아니라면, q에 넣고 그 이웃을 다시 탐색(거리는 1증가)
                 else {
-                    q.add(new int[]{ny + dy[i], nx + dx[i], nCount + 1});
+                    q.add(new Custom(ny + dy[i], nx + dx[i], nCount + 1));
                     visited[ny + dy[i]][nx + dx[i]] = true;
                 }
             }
         }
         return 0;
+    }
+    static public class Custom{
+        int y;int x;int count;
+        public Custom(int y, int x, int count) {
+            this.y = y;
+            this.x = x;
+            this.count = count;
+        }
     }
 }
