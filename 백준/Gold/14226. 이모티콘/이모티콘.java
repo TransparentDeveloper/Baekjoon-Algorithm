@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         s = Integer.parseInt(br.readLine());
-        visited = new boolean[s*5][s*5];
+        visited = new boolean[s*2][s*2];
 
         int monitor = 1;
         int clipboard = 0;
@@ -48,7 +48,7 @@ public class Main {
                         break;
                     default:
                 }
-                if(nm<=0||nb<0)
+                if(nm<=0||nb<0 || nm>=s*2 || nm>=s*2)
                     continue;
                 if(visited[nm][nb])
                     continue;
