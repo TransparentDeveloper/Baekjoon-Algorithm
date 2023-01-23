@@ -8,23 +8,20 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine(),"\\-");
 
-        String str= st.nextToken();
-        StringTokenizer stk = new StringTokenizer(str,"\\+");
-        int result = 0;
-        while(stk.hasMoreTokens()){
-            result += Integer.parseInt(stk.nextToken());
-        }
-        int temp_res = 0;
+        Integer result =null;
         while(st.hasMoreTokens()){
-            temp_res = 0;
-            str = st.nextToken();
-            stk = new StringTokenizer(str,"\\+");
+            String str = st.nextToken();
+            StringTokenizer stk = new StringTokenizer(str,"\\+");
+            int tmp=0;
             while(stk.hasMoreTokens()){
-                temp_res += Integer.parseInt(stk.nextToken());
+                tmp += Integer.parseInt(stk.nextToken());
             }
-            result -= temp_res;
+            if(result == null){
+                result = tmp;
+            }else {
+                result -= tmp;
+            }
         }
-
         System.out.println(result);
     }
 }
