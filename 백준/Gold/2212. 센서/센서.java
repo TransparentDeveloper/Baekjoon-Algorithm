@@ -10,22 +10,21 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         int K = Integer.parseInt(br.readLine());
         int[] sensor = new int[N];
-        int[] dis_near = new int[N-1];
         StringTokenizer st = new StringTokenizer(br.readLine());
         br.close();
 
         for(int i=0; i<N;i++)
             sensor[i] = Integer.parseInt(st.nextToken());
-
         Arrays.sort(sensor);
+
+        Integer[] dis_near = new Integer[N-1];
         for(int i=0; i<N-1;i++)
             dis_near[i] = sensor[i+1]-sensor[i];
 
-        List<Integer> list = Arrays.stream(dis_near).boxed().collect(Collectors.toList());
-        Collections.sort(list,Collections.reverseOrder());
+        Arrays.sort(dis_near,Collections.reverseOrder());
 
         int result=0;
-        for (Integer integer : list) {
+        for (Integer integer : dis_near) {
             if(--K>0)
                 continue;
             result += integer;
