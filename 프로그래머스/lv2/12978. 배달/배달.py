@@ -1,23 +1,20 @@
-import heapq
+from collections import defaultdict
+import heapq as hq
 
 def solution(N, road, K):
-    dist = [float('inf')] * (N+1)
-    dist[1] = 0
-    adj = [[] for _ in range(N+1)]
-    for r in road:
-        adj[r[0]].append([r[2],r[1]])
-        adj[r[1]].append([r[2],r[0]])
-    dijkstra(dist,adj)
-
-    return len([i for i in dist if i<= K])
-    
-def dijkstra(dist, adj):
-    heap = []
-    heapq.heappush(heap,[0,1])
-    while heap:
-        cost,node = heapq.heappop(heap)
-        for r in adj[node]:
-            if cost + r[0] < dist[r[1]]:
-                dist[r[1]] = cost+r[0]
-                heapq.heappush(heap,[cost + r[0],r[1]])
-    
+    dic = defaultdict(list)
+    for n1,n2,w in road:
+        dic[n1].append((w,n2))
+        dic[n2].append((w,n1))
+    distances = {node: float('inf') for node in range(1,N+1)}
+    distances[1] = 0
+    q = []
+    hq.heappush(q,(0,1))
+    while q:
+        curWei,curNod = hq.heappop(q)
+        for nexWei,nexNod in dic[curNod]:
+            if nexWei+curWei < distances[nexNod]:
+                distances[nexNod] = nexWei+curWei
+                hq.heappush(q,(nexWei+curWei,nexNod))
+    print(distances)
+    return len(list(filter(lambda x:x[1]<=K,distances.items())))
