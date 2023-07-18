@@ -3,10 +3,7 @@ def solution(n, works):
     
     if n > sum(works):
         return 0
-    
-    li = []
-    for work in works:
-        hq.heappush(li, (-1)*work)
+    hq.heapify(li := [-1*i for i in works])
     print(li)
     idx = 0
     while n > 0:
