@@ -1,24 +1,25 @@
-from collections import deque
-
+import heapq as hq
+from collections import defaultdict
+# 다익스트라
 def solution(n, roads, sources, destination):
-    graph = [[] for i in range(n+1)]
+    di = defaultdict(list)
     for s,e in roads:
-        graph[s].append(e)
-        graph[e].append(s)
-        
-    q = deque()
-    visited = [False for _ in range(n+1)]
-    q.append((0,destination))
-    visited[destination] = True
-    answer = {source:-1 for source in sources}
-    while q:
-        curCost,curPos = q.popleft()
-        if curPos in sources:
-            answer[curPos] = curCost
-        for nxtPos in graph[curPos]:
-            if not visited[nxtPos]:
-                visited[nxtPos] = True
-                q.append((curCost+1,nxtPos))
-    return list(answer.values())
-    
-                
+        di[s].append((1,e))
+        di[e].append((1,s))
+    distances = {i: float('inf') for i in range(1,n+1)}
+    distances[destination] = 0
+    heap = []
+    hq.heappush(heap,(0,destination))
+    while heap:
+        curWei,curPos = hq.heappop(heap)
+        for nxtWei,nxtPos in di[curPos]:
+            if nxtWei+curWei < distances[nxtPos]:
+                distances[nxtPos] = nxtWei+curWei
+                hq.heappush(heap,(nxtWei+curWei,nxtPos))
+    answer = []
+    for source in sources:
+        if distances[source] == float('inf'):
+            answer.append(-1)
+        else:
+            answer.append(distances[source])
+    return answer
