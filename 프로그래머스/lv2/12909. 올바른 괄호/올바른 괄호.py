@@ -9,7 +9,7 @@ def solution(s):
             if stack[-1] == ")":
                 return False
             else:
-                del stack[-1]
+                stack.pop()
     if stack:
         return False
     return True
