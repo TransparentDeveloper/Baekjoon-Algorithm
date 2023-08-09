@@ -1,23 +1,29 @@
-
-# 플로이드 와샬
+# dijkstra
+from collections import defaultdict
+import heapq as hq
 def solution(n, s, a, b, fares):
-    def floydWarshall():
-        distances = [[int(1e10) for _ in range(0,n+1)] for _ in range(0,n+1)]
-        for nod in range(1,n+1): 
-            distances[nod][nod] = 0
-        for start,end,fare in fares:
-            distances[start][end] = fare
-            distances[end][start] = fare
-        for k in range(1,n+1):
-            for i in range(1,n+1):
-                for j in range(1,n+1):
-                    distances[i][j] = min(distances[i][j],distances[i][k]+distances[k][j]) 
+    di = defaultdict(list)
+    for start,end,fare in fares:
+        di[start].append((fare,end))
+        di[end].append((fare,start))
+    
+    def dijkstra(start):
+        distances = {node:int(1e10) for node in range(1,n+1)}
+        distances[start] = 0
+        heap = []
+        hq.heappush(heap,(0,start))
+        while heap:
+            curWei,curNod = hq.heappop(heap)
+            for nxtWei,nxtNod in di[curNod]:
+                if distances[nxtNod] > curWei + nxtWei:
+                    distances[nxtNod] = curWei + nxtWei
+                    hq.heappush(heap,(curWei + nxtWei,nxtNod))
         return distances
     
-    distances = floydWarshall()
+    s = dijkstra(s)
+    a = dijkstra(a)
+    b = dijkstra(b)
     answer = int(1e10)
     for i in range(1,n+1):
-        answer = min(answer,distances[i][s]+distances[i][a]+distances[i][b])
-    
+        answer = min(answer,s[i]+a[i]+b[i])
     return answer
-    
