@@ -1,18 +1,13 @@
 def solution(progresses, speeds):
     answer = []
-    cur = 0
-    deploy = 1
-    while cur < len(progresses):
-        # 작업 진도 갱신
-        for i in range(cur,len(progresses)):
-            progresses[i] += speeds[i]
-        
+    while progresses:
+        for idx in range(len(speeds)):
+            progresses[idx] += speeds[idx]
         deploy = 0
-        while cur < len(progresses) and progresses[cur] >= 100:
+        while progresses and progresses[0] >= 100:
             deploy +=1
-            cur +=1
-        
+            progresses.pop(0)
+            speeds.pop(0)
         if deploy != 0:
             answer.append(deploy)
-
     return answer
