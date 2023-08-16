@@ -1,8 +1,10 @@
 def solution(arr):
-    answer = []
-    for elem in arr:
-        if elem not in answer:
-            answer.append(elem)
-        elif elem != answer[-1]:
-            answer.append(elem)
-    return answer
+    stack = []
+    for idx,ar in enumerate(arr):
+        if idx == 0:
+            stack.append(ar)
+            continue
+        if ar == stack[-1]:
+            continue
+        stack.append(ar)
+    return stack
