@@ -1,15 +1,8 @@
 def solution(participant, completion):
-    dic = {}
-    for part in participant:
-        dic[part] = dic.get(part,0)+1
-    
-    for com in completion:
-        if(dic.get(com,0)==0):
-            del dic[com]
-            continue
-        dic[com] = dic.get(com)-1
-    
-    for key in dic.keys():
-        if dic[key]==1:
-            return key
-    return ""
+    di = {name:0 for name in participant}
+    for name in participant:
+        di[name]+=1
+    for name in completion:
+        di[name]-=1
+    # print(di.items())
+    return [name[0] for name in di.items() if name[1]>0][0]
