@@ -1,14 +1,14 @@
+from collections import defaultdict
 def solution(phone_book):
-    len_list = set(map((lambda x: len(x)), phone_book))
-    dic = {}
+    if len(phone_book) == 1:
+        return True
+    lengths = set([len(phone) for phone in phone_book])
+    di = defaultdict(int)
     for phone in phone_book:
-        for le in len_list:
-            if len(phone) < le:
-                continue
-            elif len(phone) >= le:
-                dic[phone[:le]] = dic.get(phone[:le],0) + 1          
-                
+        for length in lengths:
+            if len(phone) >= length:
+                di[phone[:length]]+=1
     for phone in phone_book:
-        if phone in dic.keys() and dic[phone] >= 2:
+        if di[phone] >= 2:
             return False
     return True
