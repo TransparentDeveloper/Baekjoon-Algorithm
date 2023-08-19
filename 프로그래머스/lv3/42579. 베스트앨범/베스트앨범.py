@@ -1,28 +1,27 @@
+from collections import defaultdict
+
 def solution(genres, plays):
-    # dic1 : key - genre, value - [(play,idx)..]
-    dic1 = dict()
-    idx = 0
-    for g,p in zip(genres,plays):
-        if g in dic1:
-            dic1[g].append((p,idx))
-        else:
-            dic1[g] = [(p,idx)]
-        idx += 1
-    # dic2 : key - genre, value = total play
-    dic2 = dict()
-    for g,p in zip(genres,plays):
-        dic2[g] = dic2.get(g,0) + p
-    dic2 = sorted(dic2.items(), key = lambda x: x[1],reverse = True)
+    di1 = defaultdict(int)
+    
+    # di1
+    for idx in range(len(plays)):
+        di1[genres[idx]] +=  plays[idx]
+    
+    sortedList = list(sorted(di1.items(), key=lambda x: -x[1]))
+    # [('pop', 3100), ('classic', 1450)]
+    
+    di2 = defaultdict(list)
+    for idx in range(len(plays)):
+        di2[genres[idx]].append((plays[idx],idx))
+    for key in di2:
+        di2[key].sort(key=lambda x: -x[0])
+    # {'classic': [(800, 3), (500, 0), (150, 2)], 'pop': [(2500, 4), (600, 1)]})
     
     answer = []
-    for k,v in dic2:
-        cnt = 0
-        dic1[k] = sorted(dic1[k],key = lambda x:(-x[0],x[1]))
-        for elem in dic1[k]:
-            if cnt == 2:
-                break
-            answer.append(elem[1])
-            cnt +=1
-    
-    
+    for genre,play in sortedList:
+        answer.append(di2[genre][0][1])
+        if len(di2[genre]) != 1:
+            answer.append(di2[genre][1][1])
     return answer
+        
+    
