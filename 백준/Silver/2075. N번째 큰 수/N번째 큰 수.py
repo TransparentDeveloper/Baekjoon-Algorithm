@@ -9,5 +9,7 @@ for _ in range(n):
         if len(heap)< n:
             hq.heappush(heap,li[idx])
         else:
-            hq.heappush(heap,max(hq.heappop(heap),li[idx]))
+            if heap[0] < li[idx]:
+                hq.heappop(heap)
+                hq.heappush(heap,li[idx])  
 print(min(heap))
