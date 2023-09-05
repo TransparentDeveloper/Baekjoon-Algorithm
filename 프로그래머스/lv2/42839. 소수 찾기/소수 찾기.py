@@ -1,30 +1,34 @@
-def solution(numbers):
-    global answer, nums, visited, isPrime
-    nums = list(numbers)
-    visited = [False for _ in nums]
-    answer = set()
-    nums = list(numbers)
-    dfs(0,0)
-    return len(answer)
-
-def check(num):
-    if num ==0 or num == 1:
+import math
+# dfs, 에라토스테네스의 체
+def isPrime(x):
+    if x == 1:
         return False
-    for i in range(2,num):
-        if num % i == 0:
+    for i in range(2, x//2+1):
+        if x%i == 0:
             return False
     return True
 
-def dfs(num , att):
-    if(check(num)):
-        answer.add(num)
-    if att == len(nums):
-        return
-    for i,n in enumerate(nums):
-        if not visited[i]:
-            visited[i] = True
-            dfs(num*10 + int(n), att+1)
-            visited[i] = False
+def solution(numbers):
     
-    
-    
+    global numList, visited, numsSet
+    numList = list(numbers)
+    visited = [False] * len(numbers)
+    numSet = set()
+    def dfs(res):
+        if len(res)<= len(numList):
+            if res and res[0] =="0":
+                return
+            numSet.add(res)
+        for i in range(len(numList)):
+            if not visited[i]:
+                visited[i] = True
+                dfs(res + (numList[i]))
+                visited[i] = False
+    dfs("")
+    answer = 0 
+    numList = list(numSet)
+    numList.remove("")
+    for x in list(numList):
+        if(isPrime(int(x))):
+            answer+=1
+    return answer
