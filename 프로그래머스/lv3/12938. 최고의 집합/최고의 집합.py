@@ -1,9 +1,15 @@
 def solution(n, s):
-    if n>s:
+    if s < n:
         return [-1]
-    li = [s//n for _ in range(n)]
-    namuge = s%n
-    print(namuge)
-    for idx in range(len(li)-namuge,len(li)):
-        li[idx] += 1 
-    return li
+    
+    div = [s//n for _ in range(n)]
+    left = s-sum(div)
+    
+    for i in range(len(div)-1,-1,-1):
+        if left ==0:
+            break
+        div[i]+=1
+        left-=1
+    return div
+        
+    # return answer
