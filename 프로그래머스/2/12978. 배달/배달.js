@@ -1,26 +1,30 @@
 function solution(N, road, K) {
-    const graph = Array.from({length: N+1}, () => new Array(N+1).fill(500001))
-    const visited = Array.from({length: N+1}, () => new Array(N+1).fill(false))
+    const graph = Array.from({length: N+1}, () => ([]))
     
-    road.forEach(([s,e,c])=>{
-        graph[s][e] = Math.min(graph[s][e], c)
-        graph[e][s] = graph[s][e]
+    road.forEach(([a,b,c])=>{
+        graph[a].push([c,b])
+        graph[b].push([c,a])
     })
-    for(let i=1; i < N+1; i++) graph[i][i] = 0
     
-
-    for(let k = 1; k < N+1; k++){
-        for(let i =1; i<N+1; i++){
-            for(let j=1; j<N+1; j++){
-                graph[i][j] = Math.min(graph[i][j], graph[i][k] + graph[k][j])
+    
+    const dist = new Array(N+1).fill(500001);
+    dist[1] = 0
+    const pq = [[0,1]]
+    
+    while(pq.length){
+        const [curCost, curNode] = pq.pop()
+        
+        for (const [nxtCost, nxtNode] of graph[curNode]) {
+            const totalDist = nxtCost + curCost
+            if ( totalDist < dist[nxtNode] ){
+                dist[nxtNode] = totalDist
+                pq.push([totalDist, nxtNode])
+                pq.sort((arr1,arr2)=>(arr1[0] - arr2[0]))
             }
         }
+        
     }
     
-    let answer = 0
-    graph[1].forEach( (cost)=>{
-        if(cost <= K) answer++;
-    } )
-
-    return answer
+    return dist.filter((di)=>di<=K).length
+    
 }
