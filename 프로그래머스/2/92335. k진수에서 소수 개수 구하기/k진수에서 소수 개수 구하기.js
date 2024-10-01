@@ -1,22 +1,25 @@
-
 function isPrime(num){
-    if (num < 2) return false
-
+    if(num == 0 || num == 1) return false
+    
     const sqrt = Math.sqrt(num)
-    for(let i = 2; i<= sqrt; i++)
-        if(num%i === 0) 
-            return false
+    
+    for(let i=2; i<=sqrt; i++)
+        if (num%i===0) return false
     return true
 }
 
 function solution(n, k) {
-    const kJinsu = n.toString(k)
-    const nums = getSubNums(kJinsu)
-
-    return nums.filter((num)=>isPrime(num)).length
+    const kJinsu = convertToJinsu(n,k)
+    const pArr = getPArr(kJinsu)
+    
+    const primeP = pArr.filter((p)=>isPrime(p))
+    return (primeP.length)
 }
 
-function getSubNums(str){
-    const subNums = str.split("0").filter((char)=>char!='').map(Number)
-    return subNums
+function convertToJinsu(n,k){
+    return (n).toString(k)
+}
+
+function getPArr(str){
+    return str.split("0").map(Number)
 }
