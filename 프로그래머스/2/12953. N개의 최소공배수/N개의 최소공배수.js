@@ -1,24 +1,32 @@
 function solution(arr) {
-    const answer = arr.reduce((acc,num)=>{
-        const gcd = getGCD(acc,num)// gcd
-        const lcm = getLCM(acc,num,gcd)
-        return lcm
-    })
-    
-    return answer
+   const answer = arr.reduce((acc,num)=>(getLCM(acc,num)))
+   return answer
 }
 
-function getLCM(num1, num2, gcd){
-    return (num1*num2) / gcd
+function getLCM(a, b){
+    let max = Math.max(a,b)
+    let min = Math.min(a,b)
+    
+    let mod
+    while(min!==0){
+        mod = max%min
+        max = min
+        min = mod
+    }
+    
+    const gcd = max
+    return (a*b) / gcd
 }
 
 function getGCD(a,b){
-    [a,b] = [Math.max(a,b), Math.min(a,b)]
+    [a, b] = [Math.max(a,b), Math.min(a,b)]
     
-    while (b > 0) {
-        const c = a % b
+    let c = a
+    while(b!==0){
+        c = a%b
         a = b
         b = c
     }
+
     return a
 }
