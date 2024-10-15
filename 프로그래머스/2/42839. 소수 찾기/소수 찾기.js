@@ -1,53 +1,50 @@
-const MAX_SAFTINTEGER = 10000000
-const IS_PRIME = new Array(MAX_SAFTINTEGER+1).fill(true)
+const MAX_NUMBER = 10000000
+const IS_PRIME = new Array(MAX_NUMBER+1).fill(true)
 
-
-function adjustIsPrime(){
+function initIsPrime(){
     IS_PRIME[0] = false
     IS_PRIME[1] = false
-   
-    const sqrt = Math.ceil(Math.sqrt(MAX_SAFTINTEGER))
-    for(let i = 2; i<sqrt; i++)
-        if(IS_PRIME[i])
-            for(let j = i*i; j<MAX_SAFTINTEGER; j+=i)
-                IS_PRIME[j] = false
     
+    const sqrt = Math.floor(Math.sqrt(MAX_NUMBER))
+    for(let i=2; i <= sqrt; i++){
+        if (!IS_PRIME[i]) continue
+        for (let j= i*i ; j <= MAX_NUMBER; j+=i)
+            IS_PRIME[j] = false
+    }    
 }
-
 
 function solution(numbers) {
-    adjustIsPrime()
+    initIsPrime()
+    const cadidate = getSubstring(numbers)
     
-    const nums = stringSpliter(numbers)
-    const combi = getPossibleCombi(nums)
-    
-    
-    const result = combi.filter((num)=>IS_PRIME[num])
-    return result.length
+    const prime = cadidate.filter(num => IS_PRIME[num])
+    return prime.length
 }
 
-function stringSpliter(string){
-    return string.split("").map(Number)
-}
-
-function getPossibleCombi(nums){
-    const numsSize = nums.length
-    const result = []
-    const visited = new Array(numsSize).fill(false)
+function getSubstring(numbers){
+    const chars = numbers.split("")
+    const visited = new Array(numbers.length).fill(false)
+    const set = new Set()
     
-    function dfs(visited, acc){
-        for(let i = 0; i < numsSize; i++){
+    function dfs(subNumbers, depth){
+        if(depth === numbers.length){
+            if(subNumbers!='') set.add(parseInt(subNumbers))
+            return 
+        }
+        
+        for(let i =0; i< numbers.length; i++){
             if(visited[i]) continue
+            
+            // 1. 추가한다.
             visited[i] = true
-            
-            const subRes = acc*10 + nums[i]
-            result.push(subRes)
-            dfs(visited, subRes)
-            
+            dfs(subNumbers+chars[i], depth+1)
             visited[i] = false
+        
+            // 2. 추가안함.
+            dfs(subNumbers, depth+1)
         }
     }
     
-    dfs(visited, 0)
-    return Array.from(new Set(result))
+    dfs('',0)
+    return Array.from(set)
 }
