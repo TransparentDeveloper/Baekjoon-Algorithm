@@ -1,50 +1,58 @@
-const MAX_NUMBER = 10000000
-const IS_PRIME = new Array(MAX_NUMBER+1).fill(true)
+const UPPER_LIMIT = 10000000
 
-function initIsPrime(){
-    IS_PRIME[0] = false
-    IS_PRIME[1] = false
+function storeIsPrime(){
+    const isPrime = new Array(UPPER_LIMIT+1).fill(true)
     
-    const sqrt = Math.floor(Math.sqrt(MAX_NUMBER))
-    for(let i=2; i <= sqrt; i++){
-        if (!IS_PRIME[i]) continue
-        for (let j= i*i ; j <= MAX_NUMBER; j+=i)
-            IS_PRIME[j] = false
-    }    
+    isPrime[0] = false
+    isPrime[1] = false
+    
+    const sqrt = Math.floor(Math.sqrt(UPPER_LIMIT))
+    for(let i = 2; i<=sqrt; i++){
+        if(!isPrime[i]) continue
+        for(let j = i*i; j<=UPPER_LIMIT; j+=i)
+            isPrime[j] = false
+    }
+    
+    return () => isPrime
 }
 
 function solution(numbers) {
-    initIsPrime()
-    const cadidate = getSubstring(numbers)
+    const getIsPrime = storeIsPrime()
+    const isPrime = getIsPrime()
     
-    const prime = cadidate.filter(num => IS_PRIME[num])
-    return prime.length
+    const subNumbers = getAllSubNumbers(numbers)
+    const primes = subNumbers.filter((subNumber)=>isPrime[subNumber])
+    return primes.length;
 }
 
-function getSubstring(numbers){
-    const chars = numbers.split("")
-    const visited = new Array(numbers.length).fill(false)
-    const set = new Set()
+function getAllSubNumbers(numbers){
+    const size = numbers.length
+    const splited = numbers.split("")
+    const isVisited = new Array(size).fill(false)
     
-    function dfs(subNumbers, depth){
-        if(depth === numbers.length){
-            if(subNumbers!='') set.add(parseInt(subNumbers))
-            return 
+    const answerSet = new Set()
+    
+    function dfs(depth, subNumbers){
+        
+        if(depth === size){
+            if(subNumbers !== '') 
+                answerSet.add(parseInt(subNumbers))
+            return
         }
         
-        for(let i =0; i< numbers.length; i++){
-            if(visited[i]) continue
+        for(let i = 0; i < size; i++){
+            if(isVisited[i])continue
             
-            // 1. 추가한다.
-            visited[i] = true
-            dfs(subNumbers+chars[i], depth+1)
-            visited[i] = false
-        
-            // 2. 추가안함.
-            dfs(subNumbers, depth+1)
+            // 1. 지금 걸 가져간다.
+            isVisited[i] = true
+            dfs(depth+1, subNumbers+splited[i])
+            isVisited[i] = false
+            
+            // 2. 놔두고 간다.
+            dfs(depth+1, subNumbers)
         }
     }
     
-    dfs('',0)
-    return Array.from(set)
+    dfs(0,'')
+    return Array.from(answerSet)
 }
