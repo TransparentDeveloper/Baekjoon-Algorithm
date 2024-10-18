@@ -1,50 +1,45 @@
-const UPPER_LIMIT = 10000000
+const SAFE_BIG_INTEGER=10000000
+const isPrime=new Array(SAFE_BIG_INTEGER+1).fill(true)
+isPrime[0]=false
+isPrime[1]=false
 
-const isPrime = new Array(UPPER_LIMIT+1).fill(true)
-
-function initIsPrime(){
-    const sqrt = Math.floor(Math.sqrt(UPPER_LIMIT))
-
-    isPrime[0] = false
-    isPrime[1] = false
-
-    for(let i = 2; i<=sqrt; i++) {
-        if(!isPrime[i]) continue
-        for(let j = i*i; j<=UPPER_LIMIT; j+=i)
-            isPrime[j] = false
-    }   
+const range=Math.floor(Math.sqrt(SAFE_BIG_INTEGER))
+for(let i=2;i<range;i++){
+    if(!isPrime[i])continue
+    for(let j=i*i;j<SAFE_BIG_INTEGER;j+=i)
+        isPrime[j]=false
 }
-
 
 function solution(numbers) {
-    initIsPrime()
-    const nums = getAllNums(numbers)
-    return nums.filter((num)=>isPrime[num]).length
+    const subnumbers=getAllSubnumbers(numbers)
+    
+    return subnumbers.filter((num)=>isPrime[num]).length
 }
 
-function getAllNums(numbers){
-    const split = numbers.split("")
-    const splitSize = split.length
+function getAllSubnumbers(numbers){
+    const split=numbers.split("")
+    const splitSize=split.length
+    const isVisited=new Array(splitSize).fill(false)
     
     const set = new Set()
-    const isVisited = new Array(splitSize).fill(false)
-    function DFS(depth, nums){
-        if(splitSize == depth){
-            if(nums!=='') set.add(parseInt(nums))
+    
+    function dfs(depth, subnumbers){
+        if(depth===splitSize){
+            if(subnumbers!=='')
+                set.add(parseInt(subnumbers))
             return
         }
-        
-        for(let i = 0; i<splitSize; i++){
+        for(let i=0;i<splitSize;i++){
             if(isVisited[i]) continue
             
-            isVisited[i] = true
-            DFS(depth+1, nums+split[i])
-            isVisited[i] = false
+            isVisited[i]=true
+            dfs(depth+1,subnumbers+split[i])
+            isVisited[i]=false
             
-            DFS(depth+1, nums)
+            dfs(depth+1,subnumbers)
         }
     }
     
-    DFS(0,'')
+    dfs(0,'')
     return Array.from(set)
 }
