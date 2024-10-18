@@ -1,16 +1,13 @@
 function solution(arr) {
-    const totLCM = arr.reduce(getLCM)
-    return totLCM
+    return arr.reduce(getLCM)
 }
-
-function getLCM(a,b){ 
-    let max = Math.max(a,b)
-    let min = Math.min(a,b)
-    while(min !== 0){
-        const mod = max % min
-        max = min
-        min = mod
+function getLCM(a,b){
+    let max=Math.max(a,b)
+    let min=Math.min(a,b)
+    while (min!==0){
+        const mod=max%min
+        max=min
+        min=mod
     }
-    const gcd = max
-    return (a*b)/gcd
+    return (a*b)/max
 }
