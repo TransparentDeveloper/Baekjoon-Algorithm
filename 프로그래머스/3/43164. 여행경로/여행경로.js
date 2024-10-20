@@ -1,28 +1,35 @@
 function solution(tickets) {
-    tickets.sort(([_1,dist1],[_2,dist2])=>{
-        return dist1.localeCompare(dist2)
+    const set=new Set()
+    const obj={}
+    tickets.forEach(([start, end])=>{
+        set.add(start)
+        set.add(end)
+        
+        if(!obj[start]) obj[start]=[]
+        obj[start].push(end)
     })
-    const n = tickets.length
-    const used=new Array(n).fill(false)
-    
-    let answer = []
-    function dfs(cur,history){
-        if(history.length===n+1&&used.every((elem)=>elem)){
-            answer=[...history]
+    const cities = Array.from(set)
+    const visited = {}
+    for(const city of cities){
+        if(!visited[city]) visited[city]=false
+    }
+    const answer = []
+    function backtracking(stack){
+        if(cities.length===stack.length){
+            console.log(stack)
+            answer.push([...stack])
             return
         }
-        for(let i=0;i<n;i++){
-            const [src,dist]=tickets[i]
-            if(!used[i]&&src===cur){
-                used[i]=true
-                history.push(dist)
-                dfs(dist,history)
-                history.pop()
-                used[i]=false
+        const curCity=stack.at(-1)
+        for(const nxtCity of obj[curCity]){
+            if(!visited[nxtCity]){
+                visited[nxtCity]=true
+                stack.push(nxtCity)
+                backtracking(stack)
+                stack.pop(nxtCity)
             }
-            if(answer.length) return
         }
     }
-    dfs("ICN",["ICN"])
-    return answer
+    backtracking(['ICN'])
+    console.log(answer)   
 }
