@@ -1,35 +1,35 @@
 function solution(tickets) {
-    const set=new Set()
-    const obj={}
-    tickets.forEach(([start, end])=>{
-        set.add(start)
-        set.add(end)
-        
-        if(!obj[start]) obj[start]=[]
-        obj[start].push(end)
+    console.log(tickets.length + 1)
+    const pathCount = tickets.length + 1
+    
+    tickets.sort((a,b)=>{
+        const dist1 = a[1]
+        const dist2 = b[1]
+        return dist2.localeCompare(dist1)
     })
-    const cities = Array.from(set)
-    const visited = {}
-    for(const city of cities){
-        if(!visited[city]) visited[city]=false
-    }
-    const answer = []
-    function backtracking(stack){
-        if(cities.length===stack.length){
-            console.log(stack)
-            answer.push([...stack])
+    console.log(tickets)
+    const isUsed = new Array(tickets.length).fill(false)
+    
+    let answer = []
+    
+    function dfs(curCity, route){
+        if(route.length === pathCount){
+            answer = [...route]
             return
         }
-        const curCity=stack.at(-1)
-        for(const nxtCity of obj[curCity]){
-            if(!visited[nxtCity]){
-                visited[nxtCity]=true
-                stack.push(nxtCity)
-                backtracking(stack)
-                stack.pop(nxtCity)
+        for(let tIdx=0; tIdx<tickets.length; tIdx++){
+            const [srcCity, distCity] = tickets[tIdx]
+
+            if(!isUsed[tIdx] && srcCity == curCity){
+                isUsed[tIdx] = true
+                route.push(distCity)
+                dfs(distCity, route)
+                route.pop()
+                isUsed[tIdx] = false
             }
         }
     }
-    backtracking(['ICN'])
-    console.log(answer)   
+    
+    dfs("ICN", ["ICN"])
+    return answer;
 }
