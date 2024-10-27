@@ -29,11 +29,9 @@ function solution(num) {
       for (let idx3 = idx2; idx3 < primesSize; idx3++){
         const val3 = primes[idx3]
         if(val1 + val2+ val3 >= num) continue
-        for (let idx4 = idx3; idx4 < primesSize; idx4++){
-          const val4 = primes[idx4]
-          if (val1 + val2 + val3+ val4 === num) 
-            return [val1, val2, val3, val4]
-        }
+        
+        const val4 = num - (val1 + val2 + val3)
+        if(isPrime[val4]) return [val1,val2,val3,val4]
       }
     }
   }
