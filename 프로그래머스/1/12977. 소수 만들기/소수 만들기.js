@@ -1,29 +1,31 @@
-const MAX_SUM=3000 + 1
-
-const isPrime=new Array(MAX_SUM+1).fill(true)
-isPrime[0]=false
-isPrime[1]=false
-const sqrt=Math.ceil(Math.sqrt(MAX_SUM))
-for(let i=2;i<=sqrt;i++){
-    if(!isPrime[i])continue
-    for(let j=i*i;j<=MAX_SUM;j+=i)
-        isPrime[j]=false
+function isPrime(num){
+    if(num<2) return false
+    if(num===2) return true
+    if(num%2==0) return false
+    
+    const sqrt = Math.floor(Math.sqrt(num))
+    for(let i=3; i<=sqrt; i+=2)
+        if(num%i===0) 
+            return false
+    return true
 }
 
 function solution(nums) {
-    const sums = getAll3Sums(nums)
-    return sums.filter((sum)=>isPrime[sum]).length
-}
-
-function getAll3Sums(nums){
-    const answer = []
-    const size = nums.length
-    for(let i =0; i<size-2;i++){
-        for(let j=i+1;j<size-1;j++){
-            for(let k=j+1;k<size;k++){
-                answer.push(nums[i]+nums[j]+nums[k])
+    const numsSize = nums.length
+    let answer = 0
+    
+    for(let a=0; a<numsSize-2;a++){
+        for(let b=a+1; b<numsSize-1;b++){
+            for(let c=b+1; c<numsSize; c++){
+                const aVal = nums[a]
+                const bVal = nums[b]
+                const cVal = nums[c]
+                
+                if(isPrime(aVal+bVal+cVal))
+                    answer++
             }
         }
     }
+    
     return answer
 }
