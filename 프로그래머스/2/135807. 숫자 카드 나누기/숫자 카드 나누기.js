@@ -1,55 +1,28 @@
 function solution(arrayA, arrayB) {
-    const gcdA = getArrayGCD(arrayA)
-    const gcdB = getArrayGCD(arrayB)
+    const gcdA = arrayA.reduce(getGCD)
+    const gcdB = arrayB.reduce(getGCD)
     
-    const isValidA = cantDivideAll(arrayA, gcdB)
-    const isValidB = cantDivideAll(arrayB, gcdA)
-  
-    if(isValidA && isValidB) return Math.max(gcdA, gcdB)
-    if(isValidA) return gcdB
-    if(isValidB) return gcdA
+    const isA = cantDivide(arrayB,gcdA)
+    const isB = cantDivide(arrayA,gcdB)
     
-    return 0
+    if(!isA && !isB)
+        return 0
     
+    if(isA && !isB)
+       return gcdA
+     
+    if(isB && !isA)
+       return gcdB
+    
+    return Math.max(gcdA, gcdB)
 }
 
-function isSameArray(arrayA, arrayB) {
-    const arraySize = arrayA.length
-    
-    for(let i = 0; i < arraySize; i++)
-        if(arrayA[i] !== arrayB[i]) return false
-    
-    return true
+function cantDivide(arr, num){
+    return arr.every((elem)=> elem%num !== 0)
 }
-
-function cantDivideAll(array, num){
-    const arraySize = array.length
-    
-    for(let i =0; i< arraySize; i++)
-        if(array[i]%num === 0) return false
-    
-    return true
-}
-
-function getArrayGCD(array){
-    const arraySize = array.length
-    let result = array[0]
-    if(arraySize == 1) return result
-    
-    for(let i = 1; i<arraySize; i++)
-        result = getGCD(result,array[i])    
-    return result
-}
-
 
 function getGCD(a,b){
-    [a,b] = [Math.max(a,b), Math.min(a,b)]
-    
-    while(b !== 0){
-        const n = a % b
-        a = b
-        b = n
-    }
-    
-    return a
+    const max = Math.max(a,b)
+    const min = Math.min(a,b)
+    return min !== 0 ? getGCD(min, max%min): max
 }
