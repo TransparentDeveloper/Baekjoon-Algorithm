@@ -1,45 +1,59 @@
-const SAFE_BIG_INTEGER=10000000
-const isPrime=new Array(SAFE_BIG_INTEGER+1).fill(true)
+const MAX_SAFE_INTEGER = 10000000
+const isPrime = new Array(MAX_SAFE_INTEGER+1).fill(true)
+
+const sqrt = Math.floor(Math.sqrt(MAX_SAFE_INTEGER))
+
 isPrime[0]=false
 isPrime[1]=false
 
-const range=Math.floor(Math.sqrt(SAFE_BIG_INTEGER))
-for(let i=2;i<range;i++){
-    if(!isPrime[i])continue
-    for(let j=i*i;j<SAFE_BIG_INTEGER;j+=i)
-        isPrime[j]=false
+for(let i=2; i<=sqrt;i++){
+    if(!isPrime[i]) continue 
+    for(let j=i*i;j<=MAX_SAFE_INTEGER;j+=i)
+        isPrime[j] = false
 }
+
 
 function solution(numbers) {
-    const subnumbers=getAllSubnumbers(numbers)
-    
-    return subnumbers.filter((num)=>isPrime[num]).length
+    const nums = numbers.split("").map(Number)
+    console.log(nums)
+    const set = new Set()
+    const n = nums.length
+    for(let i = 1; i<=n; i++){
+        const permus = permutation(nums, i)
+        permus.forEach((elem)=>set.add(elem))
+    }
+    const candidate = Array.from(set)
+    return candidate.filter((elem) => isPrime[elem]).length
 }
 
-function getAllSubnumbers(numbers){
-    const split=numbers.split("")
-    const splitSize=split.length
-    const isVisited=new Array(splitSize).fill(false)
+// 순열
+function permutation(arr, r) {
+    const n = arr.length
     
-    const set = new Set()
+    if(r<0 || n<r)
+        return []
     
-    function dfs(depth, subnumbers){
-        if(depth===splitSize){
-            if(subnumbers!=='')
-                set.add(parseInt(subnumbers))
-            return
+    const answers = []
+    const visited = new Array(n).fill(false)
+    
+    function dfs(depth, subArr){
+        if(depth==r){
+            answers.push(Number(subArr.join("")))
+            return 
         }
-        for(let i=0;i<splitSize;i++){
-            if(isVisited[i]) continue
+        
+        for(let i = 0; i<n; i++){
+            if(visited[i]) continue 
+            const curVal = arr[i]
             
-            isVisited[i]=true
-            dfs(depth+1,subnumbers+split[i])
-            isVisited[i]=false
-            
-            dfs(depth+1,subnumbers)
+            visited[i] = true
+            subArr.push(curVal)
+            dfs(depth+1, subArr)
+            subArr.pop()
+            visited[i] = false
         }
     }
-    
-    dfs(0,'')
-    return Array.from(set)
+    dfs(0, [])
+    return answers
 }
+
