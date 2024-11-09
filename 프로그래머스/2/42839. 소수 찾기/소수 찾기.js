@@ -1,59 +1,46 @@
-const MAX_SAFE_INTEGER = 10000000
-const isPrime = new Array(MAX_SAFE_INTEGER+1).fill(true)
-
-const sqrt = Math.floor(Math.sqrt(MAX_SAFE_INTEGER))
-
-isPrime[0]=false
-isPrime[1]=false
-
-for(let i=2; i<=sqrt;i++){
-    if(!isPrime[i]) continue 
-    for(let j=i*i;j<=MAX_SAFE_INTEGER;j+=i)
-        isPrime[j] = false
-}
-
-
 function solution(numbers) {
-    const nums = numbers.split("").map(Number)
-    console.log(nums)
-    const set = new Set()
-    const n = nums.length
-    for(let i = 1; i<=n; i++){
-        const permus = permutation(nums, i)
-        permus.forEach((elem)=>set.add(elem))
-    }
-    const candidate = Array.from(set)
-    return candidate.filter((elem) => isPrime[elem]).length
+    const isPrime = sieve(10000000)
+    const subNums = getSubNums(numbers)
+    return subNums.filter((num)=>isPrime[num]).length
 }
 
-// 순열
-function permutation(arr, r) {
-    const n = arr.length
+function sieve(n){
+    const isPrime = new Array(n+1).fill(true)
     
-    if(r<0 || n<r)
-        return []
+    const sqrt = Math.floor(Math.sqrt(n))
     
-    const answers = []
-    const visited = new Array(n).fill(false)
+    isPrime[0] = false
+    isPrime[1] = false
     
-    function dfs(depth, subArr){
-        if(depth==r){
-            answers.push(Number(subArr.join("")))
-            return 
-        }
-        
-        for(let i = 0; i<n; i++){
-            if(visited[i]) continue 
-            const curVal = arr[i]
-            
+    for(let i = 0; i <= sqrt ; i++) {
+        if (!isPrime[i]) continue
+        for(let j =i*i; j<=n; j+=i) 
+            isPrime[j] = false
+    }
+    return isPrime
+}
+
+function getSubNums(numbers){
+    const sizes = numbers.length
+    const set = new Set()
+    const visited = new Array(sizes).fill(false)
+    
+    function dfs(depth, subNums){
+        if(subNums.join("") !== "")        
+            set.add(Number(subNums.join("")))
+        if(depth==sizes) return
+        for(let i = 0; i< sizes; i++){
+            if(visited[i]) continue
             visited[i] = true
-            subArr.push(curVal)
-            dfs(depth+1, subArr)
-            subArr.pop()
+            subNums.push(numbers[i])
+            dfs(depth+1, subNums)
+            subNums.pop()
             visited[i] = false
         }
     }
-    dfs(0, [])
+    
+    dfs(0,[])
+    
+    const answers = Array.from(set)
     return answers
 }
-
