@@ -9,26 +9,31 @@ readline.on('line', function(line) {
   input.push(line)
 }).on('close', function () {
   const n = Number(input.shift())
-  
-  const timeTable = input.map((schedule) => schedule.split(" ").map(Number))
-  timeTable.sort(([s1, e1], [s2, e2]) => {
-    if (s1 === s2) 
-      return e1 - e2
-    return s1-s2
+  const timeTable = input.map((row) => { 
+    return row.split(" ").map(Number)
   })
-  
-  let answer = 1
-  let endPoint = timeTable.shift()[1]
-  for (const [s, e] of timeTable) {
-    
-    if (endPoint <= s) {
-      answer++
-      endPoint = e
-    }
-    else {
-      if (e < endPoint)
-        endPoint = e
-    } 
-  }
+  const answer = solution(n, timeTable)
   console.log(answer)
 });
+
+
+function solution(n, timeTable) {
+  timeTable.sort(([s1,e1], [s2, e2]) => {
+    if (s1 === s2) 
+      return e1 - e2
+    return s1 - s2
+  })
+  
+  let answer = 0
+  let endPoint = 0
+  for (const [s,e] of timeTable) {
+    if (endPoint <= s) {
+      endPoint = e
+      answer++
+    }
+    if (e < endPoint) {
+      endPoint = e
+    }
+  }
+  return answer
+}
