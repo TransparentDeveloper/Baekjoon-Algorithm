@@ -1,30 +1,15 @@
 function solution(numer1, denom1, numer2, denom2) {
-    const denomsLCM=getLCM(denom1,denom2)
-    const numsSum=numer1*(denomsLCM/denom1)+numer2*(denomsLCM/denom2)
+    const number = (numer1*denom2) + (numer2*denom1)
+    const denom =  (denom1 * denom2)
     
-    const gcd=getGCD(denomsLCM,numsSum)
+    const gcd = getGCD(number, denom)
     
-    return [numsSum/gcd, denomsLCM/gcd];
+    
+    return [number/gcd, denom/gcd];
 }
 
-function getLCM(a,b){
-    let max = Math.max(a,b)
-    let min = Math.min(a,b)
-    while(min!==0){
-        const mod = max%min
-        max = min
-        min = mod
-    }
-    return (a*b)/max
-}
-
-function getGCD(a,b){
-    let max = Math.max(a,b)
-    let min = Math.min(a,b)
-    while(min!==0){
-        const mod = max%min
-        max = min
-        min = mod
-    }
-    return max
+const getGCD = (a,b) => {
+    const min = Math.min(a,b)
+    const max = Math.max(a,b)
+    return min === 0 ? max : getGCD(min, max%min)
 }
