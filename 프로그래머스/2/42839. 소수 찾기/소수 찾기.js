@@ -1,46 +1,48 @@
-function solution(numbers) {
-    const isPrime = sieve(10000000)
-    const subNums = getSubNums(numbers)
-    return subNums.filter((num)=>isPrime[num]).length
-}
-
-function sieve(n){
-    const isPrime = new Array(n+1).fill(true)
+function getIsPrimes (maxNum) {
+    const isPrimes = new Array(maxNum+1).fill(true);
+    isPrimes[0] = false
+    isPrimes[1] = false
     
-    const sqrt = Math.floor(Math.sqrt(n))
+    const sqrt = Math.sqrt(maxNum+1);
     
-    isPrime[0] = false
-    isPrime[1] = false
-    
-    for(let i = 0; i <= sqrt ; i++) {
-        if (!isPrime[i]) continue
-        for(let j =i*i; j<=n; j+=i) 
-            isPrime[j] = false
+    for (let i = 2; i <= sqrt; i++){
+        for (let j = i*i; j < maxNum+1; j+=i) {
+            isPrimes[j] = false   
+        }
     }
-    return isPrime
+    return isPrimes
 }
 
-function getSubNums(numbers){
-    const sizes = numbers.length
-    const set = new Set()
-    const visited = new Array(sizes).fill(false)
+
+function solution(numbers) {
+    const splits = numbers.split('').map(Number)
     
-    function dfs(depth, subNums){
-        if(subNums.join("") !== "")        
-            set.add(Number(subNums.join("")))
-        if(depth==sizes) return
-        for(let i = 0; i< sizes; i++){
-            if(visited[i]) continue
+    const subNumArr = getSubNumArr(splits)
+    
+    const isPrimes = getIsPrimes(Math.max(...subNumArr))
+    
+    return subNumArr.filter((num)=>isPrimes[num]).length
+}
+
+function getSubNumArr(numArr) {
+    const results = new Set();
+    const numArrSize = numArr.length
+    
+    const visited = new Array(numArrSize).fill(false)
+    function dfs(acc) {
+        if (acc !== 0)
+            results.add(acc)
+        if (visited.every((tf)=>tf)) {
+            return
+        }
+        for (let i = 0; i < numArrSize; i++) {
+            if (visited[i])
+                continue
             visited[i] = true
-            subNums.push(numbers[i])
-            dfs(depth+1, subNums)
-            subNums.pop()
+            dfs(acc*10+numArr[i])
             visited[i] = false
         }
     }
-    
-    dfs(0,[])
-    
-    const answers = Array.from(set)
-    return answers
+    dfs(0)
+    return Array.from(results)
 }
